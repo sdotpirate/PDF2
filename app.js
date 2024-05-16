@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('createPdfButton').addEventListener('click', () => {
         const input = document.getElementById('fileInput');
         const notes = document.getElementById('notes').value;
-        const notesPosition = document.getElementById('notesPosition').value;
+        const notesPosition = document.querySelector('input[name="notesPosition"]:checked').value;
         const customFileName = document.getElementById('fileNameInput').value.trim();
 
         if (input.files.length > 0) {
