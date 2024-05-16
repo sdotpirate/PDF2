@@ -36,7 +36,7 @@
         .container:hover {
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
         }
-        input[type="file"], input[type="text"], select, textarea {
+        input[type="file"], input[type="text"], textarea {
             width: 100%;
             padding: 12px;
             margin-bottom: 20px;
@@ -45,7 +45,7 @@
             box-sizing: border-box;
             transition: border-color 0.3s ease;
         }
-        input[type="file"]:focus, input[type="text"]:focus, select:focus, textarea:focus {
+        input[type="file"]:focus, input[type="text"]:focus, textarea:focus {
             border-color: #4CAF50;
             outline: none;
         }
@@ -86,6 +86,14 @@
             font-size: 14px;
             text-align: left;
         }
+        .radio-group {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        .radio-group label {
+            font-size: 16px;
+        }
         @media (max-width: 600px) {
             h1 {
                 font-size: 24px;
@@ -102,13 +110,18 @@
         <h1>Image to PDF Converter</h1>
         <input type="file" id="fileInput" accept="image/*" multiple>
         <input type="text" id="fileNameInput" placeholder="Enter custom file name (optional)">
-        <label for="notesPosition">Place notes on:</label>
-        <select id="notesPosition">
-            <option value="first">First Page</option>
-            <option value="last">Last Page</option>
-        </select>
-        <label for="notes">Please enter notes below (leave blank if no notes are needed)</label>
+        <label>Please enter notes below (leave blank if no notes are needed)</label>
         <textarea id="notes" placeholder="Enter your notes here..."></textarea>
+        <div class="radio-group">
+            <label>
+                <input type="radio" name="notesPosition" value="first" checked>
+                First Page
+            </label>
+            <label>
+                <input type="radio" name="notesPosition" value="last">
+                Last Page
+            </label>
+        </div>
         <button id="createPdfButton">Create PDF</button>
         <div class="adsense">
             <!-- Google AdSense Placeholder -->
