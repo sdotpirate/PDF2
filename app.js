@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         title: 'PDF Document',
                         files: [new File([pdfBlob], fileName, { type: 'application/pdf' })]
                     }).catch(console.error);
-                }, 500);
+                }, 1000); // Increased delay to 1 second
             }
         } else {
             // Handle download for non-mobile devices or if the tab couldn't be opened
