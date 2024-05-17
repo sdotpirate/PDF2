@@ -3,9 +3,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const input = document.getElementById('fileInput');
         const notes = document.getElementById('notes').value;
         const notesPosition = document.querySelector('input[name="notesPosition"]:checked').value;
-        const customFileName = document.getElementById('fileNameInput').value.trim();
+        let customFileName = document.getElementById('fileNameInput').value.trim();
 
         if (input.files.length > 0) {
+            if (customFileName && !customFileName.toLowerCase().endsWith('.pdf')) {
+                customFileName += '.pdf';
+            }
             createPdf(input.files, notes, notesPosition, customFileName);
         } else {
             alert('Please select images to create a PDF.');
