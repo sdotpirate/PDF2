@@ -113,8 +113,8 @@ document.addEventListener('DOMContentLoaded', function() {
     function handlePdf(fileName, pdfBlob, pdfUrl) {
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-        if (isMobile && navigator.share) {
-            // Open the PDF in a new tab
+        if (isMobile) {
+            // Open the PDF in a new tab for mobile devices
             const newTab = window.open(pdfUrl, '_blank');
             if (newTab) {
                 newTab.focus();
