@@ -43,9 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const fileName = customFileName || generateDefaultFileName();
         const pdfBlob = pdf.output('blob');
-        const pdfUrl = URL.createObjectURL(pdfBlob);
-
-        handlePdf(fileName, pdfBlob, pdfUrl);
+        savePdf(fileName, pdfBlob);
     }
 
     function resizeImage(file, maxWidth, maxHeight) {
@@ -110,26 +108,18 @@ document.addEventListener('DOMContentLoaded', function() {
         return `${appName}_${formattedDate}_${formattedTime}.pdf`;
     }
 
-    function handlePdf(fileName, pdfBlob, pdfUrl) {
+    function savePdf(fileName, pdfBlob) {
+        // Check if the device is mobile
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-        if (isMobile) {
-            // Open the PDF in a new tab for mobile devices
-            const newTab = window.open(pdfUrl, '_blank');
-            if (newTab) {
-                newTab.focus();
-                // Handle sharing on mobile devices after a delay to ensure the tab is loaded
-                setTimeout(() => {
-                    navigator.share({
-                        title: 'PDF Document',
-                        files: [new File([pdfBlob], fileName, { type: 'application/pdf' })]
-                    }).catch(console.error);
-                }, 2000); // Delay of 2 seconds
-            }
+        if (isMobile && navigator.share) {
+            navigator.share({
+                title: 'PDF Document',
+                files: [new File([pdfBlob], fileName, { type: 'application/pdf' })]
+            }).catch(console.error);
         } else {
-            // Trigger download for desktop devices
             const link = document.createElement('a');
-            link.href = pdfUrl;
+            link.href = URL.createObjectURL(pdfBlob);
             link.download = fileName;
             link.click();
         }
