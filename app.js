@@ -102,7 +102,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const appName = "PIXtoPDF";
         const date = new Date();
         const formattedDate = `${(date.getMonth() + 1).toString().padStart(2, '0')}.${date.getDate().toString().padStart(2, '0')}.${date.getFullYear().toString().slice(-2)}`;
-        const formattedTime = `${date.getHours() % 12 || 12}:${date.getMinutes().toString().padStart(2, '0')}${date.getHours() >= 12 ? 'PM' : 'AM'}`;
+        const hours = date.getHours();
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        const formattedTime = `${hours % 12 || 12}.${minutes}${hours >= 12 ? 'PM' : 'AM'}`;
         return `${appName}_${formattedDate}_${formattedTime}.pdf`;
     }
 
