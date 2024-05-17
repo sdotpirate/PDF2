@@ -118,15 +118,14 @@ document.addEventListener('DOMContentLoaded', function() {
         // Check if the new tab was successfully opened
         if (newTab) {
             newTab.focus();
-
-            // Handle sharing on mobile devices
-            if (isMobile && navigator.share) {
-                newTab.onload = () => {
+            if (isMobile) {
+                // Handle sharing on mobile devices after a short delay
+                setTimeout(() => {
                     navigator.share({
                         title: 'PDF Document',
                         files: [new File([pdfBlob], fileName, { type: 'application/pdf' })]
                     }).catch(console.error);
-                };
+                }, 500);
             }
         } else {
             // Handle download for non-mobile devices or if the tab couldn't be opened
