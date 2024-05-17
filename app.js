@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const fileName = customFileName || generateDefaultFileName();
         const pdfBlob = pdf.output('blob');
-        savePdf(fileName, pdfBlob);
+        previewAndSharePdf(fileName, pdfBlob);
     }
 
     function resizeImage(file, maxWidth, maxHeight) {
@@ -108,7 +108,15 @@ document.addEventListener('DOMContentLoaded', function() {
         return `${appName}_${formattedDate}_${formattedTime}.pdf`;
     }
 
-    function savePdf(fileName, pdfBlob) {
+    function previewAndSharePdf(fileName, pdfBlob) {
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(pdfBlob);
+        link.download = fileName;
+        
+        // Open the PDF in a new tab
+        const pdfUrl = URL.createObjectURL(pdfBlob);
+        window.open(pdfUrl, '_blank');
+
         // Check if the device is mobile
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
@@ -118,9 +126,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 files: [new File([pdfBlob], fileName, { type: 'application/pdf' })]
             }).catch(console.error);
         } else {
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(pdfBlob);
-            link.download = fileName;
+            // Trigger download for non-mobile devices
             link.click();
         }
     }
