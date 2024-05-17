@@ -112,13 +112,21 @@ document.addEventListener('DOMContentLoaded', function() {
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         const pdfUrl = URL.createObjectURL(pdfBlob);
 
+        // Open the PDF in a new tab
+        const newTab = window.open(pdfUrl, '_blank');
+
+        // Check if the device is mobile
         if (isMobile && navigator.share) {
-            window.open(pdfUrl, '_blank');
+            // Ensure the new tab is opened before trying to share
+            if (newTab) {
+                newTab.focus();
+            }
             navigator.share({
                 title: 'PDF Document',
                 files: [new File([pdfBlob], fileName, { type: 'application/pdf' })]
             }).catch(console.error);
         } else {
+            // Trigger download for non-mobile devices
             const link = document.createElement('a');
             link.href = pdfUrl;
             link.download = fileName;
