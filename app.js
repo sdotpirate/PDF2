@@ -114,16 +114,17 @@ document.addEventListener('DOMContentLoaded', function() {
         link.download = fileName;
         link.click();
 
-        // If sharing is supported, create an email without body content
-        if (navigator.share) {
+        // Check if the device is mobile
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+        if (isMobile && navigator.share) {
             navigator.share({
                 title: 'PDF Document',
                 files: [new File([pdfBlob], fileName, { type: 'application/pdf' })]
             }).catch(console.error);
         } else {
-            const emailLink = document.createElement('a');
-            emailLink.href = `mailto:?subject=PDF Document&attachment="${fileName}"`;
-            emailLink.click();
+            // Provide a fallback for non-mobile devices
+            alert(`PDF saved as ${fileName}`);
         }
     }
 });
