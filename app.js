@@ -43,7 +43,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const fileName = customFileName || generateDefaultFileName();
         const pdfBlob = pdf.output('blob');
-        handlePdf(fileName, pdfBlob);
+        const pdfUrl = URL.createObjectURL(pdfBlob);
+
+        handlePdf(fileName, pdfBlob, pdfUrl);
     }
 
     function resizeImage(file, maxWidth, maxHeight) {
@@ -108,27 +110,24 @@ document.addEventListener('DOMContentLoaded', function() {
         return `${appName}_${formattedDate}_${formattedTime}.pdf`;
     }
 
-    function handlePdf(fileName, pdfBlob) {
+    function handlePdf(fileName, pdfBlob, pdfUrl) {
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        const pdfUrl = URL.createObjectURL(pdfBlob);
 
-        // Open the PDF in a new tab
-        const newTab = window.open(pdfUrl, '_blank');
-
-        // Check if the new tab was successfully opened
-        if (newTab) {
-            newTab.focus();
-            if (isMobile) {
-                // Handle sharing on mobile devices after a short delay
+        if (isMobile && navigator.share) {
+            // Open the PDF in a new tab
+            const newTab = window.open(pdfUrl, '_blank');
+            if (newTab) {
+                newTab.focus();
+                // Handle sharing on mobile devices after a delay to ensure the tab is loaded
                 setTimeout(() => {
                     navigator.share({
                         title: 'PDF Document',
                         files: [new File([pdfBlob], fileName, { type: 'application/pdf' })]
                     }).catch(console.error);
-                }, 1000); // Increased delay to 1 second
+                }, 2000); // Delay of 2 seconds
             }
         } else {
-            // Handle download for non-mobile devices or if the tab couldn't be opened
+            // Trigger download for desktop devices
             const link = document.createElement('a');
             link.href = pdfUrl;
             link.download = fileName;
