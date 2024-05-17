@@ -42,7 +42,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         const fileName = customFileName || generateDefaultFileName();
-        pdf.save(fileName);
+        const pdfBlob = pdf.output('blob');
+        savePdf(fileName, pdfBlob);
     }
 
     function resizeImage(file, maxWidth, maxHeight) {
@@ -98,9 +99,29 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function generateDefaultFileName() {
-        const appName = "appname";
-        const date = new Date().toISOString().slice(0, 10);
-        const randomNumber = Math.floor(Math.random() * 1000);
-        return `${appName}_${date}_${randomNumber}.pdf`;
+        const appName = "PIXtoPDF";
+        const date = new Date();
+        const formattedDate = `${(date.getMonth() + 1).toString().padStart(2, '0')}.${date.getDate().toString().padStart(2, '0')}.${date.getFullYear().toString().slice(-2)}`;
+        const formattedTime = `${date.getHours() % 12 || 12}:${date.getMinutes().toString().padStart(2, '0')}${date.getHours() >= 12 ? 'PM' : 'AM'}`;
+        return `${appName}_${formattedDate}_${formattedTime}.pdf`;
+    }
+
+    function savePdf(fileName, pdfBlob) {
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(pdfBlob);
+        link.download = fileName;
+        link.click();
+
+        // If sharing is supported, create an email without body content
+        if (navigator.share) {
+            navigator.share({
+                title: 'PDF Document',
+                files: [new File([pdfBlob], fileName, { type: 'application/pdf' })]
+            }).catch(console.error);
+        } else {
+            const emailLink = document.createElement('a');
+            emailLink.href = `mailto:?subject=PDF Document&attachment="${fileName}"`;
+            emailLink.click();
+        }
     }
 });
