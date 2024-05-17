@@ -109,11 +109,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function savePdf(fileName, pdfBlob) {
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(pdfBlob);
-        link.download = fileName;
-        link.click();
-
         // Check if the device is mobile
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
@@ -123,8 +118,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 files: [new File([pdfBlob], fileName, { type: 'application/pdf' })]
             }).catch(console.error);
         } else {
-            // Provide a fallback for non-mobile devices
-            alert(`PDF saved as ${fileName}`);
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(pdfBlob);
+            link.download = fileName;
+            link.click();
         }
     }
 });
